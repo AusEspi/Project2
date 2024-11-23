@@ -5,6 +5,7 @@
 using namespace std;
 
 int features = 4;
+int MAX = 0;
 
 struct Node {                                   //nodes in tree
     vector<int> f;
@@ -13,6 +14,7 @@ struct Node {                                   //nodes in tree
 };
 
 vector<Node> q;
+vector<int> maxSet;
 
 void outNode(Node n) {
     printf("\tUsing features {");
@@ -66,7 +68,7 @@ void expand(Node n, bool e) {                   //expands node
             
             for(int a = 0; a < n.r.size(); a++) {
                 if(n.r[i] != n.r[a]) {
-                    node.r.push_back(n.f[a]);
+                    node.r.push_back(n.r[a]);
                 }
             }
             for(int b = 0; b < n.f.size(); b++) {
@@ -88,14 +90,18 @@ void search(Node node, bool elim=0) {           //search alg
     int x = 0;
     int d = 0;
 
-    printf("Beninning search\n");
+    if(!elim) {
+        printf("Beninning search\n");
+    }
+    else if(elim) {
+        printf("Beninning search with an accuracy of %d%%\n", node.acc);
+    }
 
     for(int i = 0; i < node.r.size(); i++) {
         set.push_back(node.r[i]);
     }
     
     expand(node, elim);
-    // printf("\nhere\n");
 
     while(d < features-1) {
         if(!q.empty()) {
@@ -133,6 +139,14 @@ void search(Node node, bool elim=0) {           //search alg
                 set.push_back(q[x].r[i]);
             }
             max = q[x].acc;
+
+            if(max > MAX) {
+                maxSet.clear();
+                for(int i = 0; i < q[x].r.size(); i++) {
+                    maxSet.push_back(q[x].r[i]);
+                }
+                MAX = max;
+            }
         }
         else if(m < max || /*d >= (features-1)*/ q.size() == 1) {
             // printf("\nhere2\n");
@@ -148,7 +162,15 @@ void search(Node node, bool elim=0) {           //search alg
                     }
                 }
             }
-            printf("}, with an accuracy of %d\n", max);
+            printf("}, with an accuracy of %d\n\n", max);
+
+            if(max > MAX) {
+                maxSet.clear();
+                for(int i = 0; i < set.size(); i++) {
+                    maxSet.push_back(set[i]);
+                }
+                MAX = max;
+            }
             break;
         }
 
@@ -194,7 +216,33 @@ int main() {
             search(init, 1);
         }
         else if(c == 3) {
+            for(int i = 0; i < features; i++) {
+                init.f.push_back(i+1);
+            }
+            if(!init.r.empty()) {
+                init.r.clear();
+            }
+            search(init);
 
+            init.acc = eval();
+            if(!init.f.empty()) {
+                init.f.clear();
+            }
+            for(int i = 0; i < features; i++) {
+                init.r.push_back(i+1);
+            }
+            search(init, 1);
+
+            printf("THE BEST features are the set {");
+            if(!maxSet.empty()) {
+                for(int i = 0; i < maxSet.size(); i++) {
+                    printf("%d", maxSet[i]);
+                    if(i != (maxSet.size()-1)) {
+                        printf(",");
+                    }
+                }
+            }
+            printf("}, with an accuracy of %d\n", MAX);
         }
         else {
             c = 0;
