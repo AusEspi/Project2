@@ -9,8 +9,12 @@ struct Inst {                                   //instances
     vector<float> f;
 };
 
-void train(){
+void train(vector<float>& feat){
     return;
+}
+
+int test(int index) {
+    return 0;
 }
 
 int main() {
