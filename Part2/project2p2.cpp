@@ -2,8 +2,11 @@
 #include <fstream>
 #include <cstdlib>
 #include <vector>
+#include <cmath>
 
 using namespace std;
+
+int correct;
 
 struct Inst {                                   //instances
     int c;
@@ -12,9 +15,8 @@ struct Inst {                                   //instances
 
 vector<Inst> data;
 vector<int> fSub;
-vector<int> clssifd;
-// int min;
-// int max;
+// vector<int> clssifd;
+// vector<float> dists;
 
 void train(vector<int>& id){                    //train instances
     return;
@@ -25,11 +27,39 @@ int test(int index) {                           //test instances
 }
 
 void classify() {                               //classifier
+    for(int a = 0; a < data.size(); a++) {
+        int minC = 0;
+        float min = 999;
+        // dists.clear();
+        for(int b = 0; b < data.size(); b++) {
+            if(a != b) {
+                float sum = 0;
+                for(int c = 0; c < fSub.size(); c++) {
+                    float num;
+                    num = data[b].f[fSub[c]] - data[a].f[fSub[c]];
+                    sum += num * num;
+                }
+                // dists.push_back(sum);
+                sum = sqrt(sum);
+                if(sum <= min) {
+                    min = sum;
+                    if(minC != data[b].c){
+                        minC = data[b].c;
+                    }
+                }
+            }
+        }
+        printf("Classified Instance: %d\t\tClassified: %d\tActual: %d\n", a, minC, data[a].c);
+        if(data[a].c == minC) {
+            correct++;
+        }
+    }
+    printf("\n");
     return;
 }
 
 double valid() {                                 //validator
-    return 0;
+    return ((double)correct/data.size()) * 100;
 }
 
 int main(int argc, char* argv[]) {
@@ -102,6 +132,11 @@ int main(int argc, char* argv[]) {
         }
         printf("\n\n");
     }
+
+    classify();
+
+    printf("Correct: %d/%lu\n", correct, data.size());
+    printf("Accuracy: %f%%\n\n", valid());
 
     return 0;
 }
