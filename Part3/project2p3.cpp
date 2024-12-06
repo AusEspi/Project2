@@ -17,7 +17,7 @@ vector<Inst> data;
 vector<int> fSub;
 
 int features = 4;
-int MAX = 0;
+float MAX = 0;
 
 struct Node {                                   //nodes in tree
     vector<int> f;
@@ -134,8 +134,8 @@ void expand(Node n, bool e) {                    //expands node
 
 void search(Node node, bool elim=0) {           //search alg
     vector<int> set;
-    int max = node.acc;
-    int m = 0;
+    float max = node.acc;
+    float m = 0;
     int x = 0;
     int d = 0;
 
@@ -211,7 +211,7 @@ void search(Node node, bool elim=0) {           //search alg
                     }
                 }
             }
-            printf("}, with an accuracy of %d\n\n", max);
+            printf("}, with an accuracy of %f\n\n", max);
 
             if(max > MAX) {
                 maxSet.clear();
@@ -374,7 +374,7 @@ int main(int argc, char* argv[]) {
                     }
                 }
             }
-            printf("}, with an accuracy of %d\n\n", MAX);
+            printf("}, with an accuracy of %f\n\n", MAX);
         }
         else {
             c = 0;
