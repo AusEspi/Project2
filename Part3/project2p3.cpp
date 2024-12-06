@@ -40,15 +40,23 @@ void outNode(Node n) {
 }
 
 void classify(vector<int> fSet) {                               //classifier
+    // printf("\nset: ");
+    // for(int i = 0; i < fSet.size(); i++) {
+    //     printf("%d ", fSet[i]);
+    // }
+    // printf("\n");
+    
     for(int a = 0; a < data.size(); a++) {
         int minC = 0;
         float min = 999;
+        // printf("\nhere: ");
         for(int b = 0; b < data.size(); b++) {
             if(a != b) {
                 float sum = 0;
                 for(int c = 0; c < fSet.size(); c++) {
                     float num;
                     num = data[b].f[fSet[c]] - data[a].f[fSet[c]];
+                    // printf(" | %f = %f - %f ", num, data[b].f[fSet[c]], data[a].f[fSet[c]]);
                     sum += num * num;
                 }
                 sum = sqrt(sum);
@@ -60,17 +68,23 @@ void classify(vector<int> fSet) {                               //classifier
                 }
             }
         }
+        // printf("\n");
         // printf("Classified Instance: %d\t\tClassified: %d\tActual: %d\n", a, minC, data[a].c);
         if(data[a].c == minC) {
             correct++;
         }
     }
+    // printf("\nset: ");
+    // for(int i = 0; i < fSet.size(); i++) {
+    //     printf("%d ", fSet[i]);
+    // }
     // printf("\n");
     return;
 }
 
 double valid() {                                 //validator
     double num = ((double)correct/data.size()) * 100;
+    // printf("\nnum: %f (%d/%lu)\n", num, correct, data.size());
     correct = 0;
     return num;
 }
@@ -81,9 +95,11 @@ double eval(vector<int> fSet){                   //eval func
 }
 
 void expand(Node n, bool e) {                    //expands node
-    if(!q.empty()) {
-        q.clear();
-    }
+    // if(!q.empty()) {
+    // }
+    q.clear();
+    q.shrink_to_fit();
+    // printf("bruh CAP: %lu\n", q.capacity());
 
     if(!e) {
         for(int i = 0; i < n.f.size(); i++){
@@ -102,7 +118,7 @@ void expand(Node n, bool e) {                    //expands node
 
             node.r.push_back(n.f[i]);
 
-            node.acc = eval(n.r);               //might be wrong
+            node.acc = eval(node.r);               //might be wrong
 
             q.push_back(node);
         }
@@ -124,7 +140,7 @@ void expand(Node n, bool e) {                    //expands node
 
             node.f.push_back(n.r[i]);
 
-            node.acc = eval(n.f);               //might be wrong (elim)
+            node.acc = eval(node.f);               //might be wrong (elim)
 
             q.push_back(node);
         }
@@ -159,7 +175,7 @@ void search(Node node, bool elim=0) {           //search alg
         for(int i = 0; i < q.size(); i++) {
             outNode(q[i]);
 
-            if(q[i].acc > m) {
+            if(q[i].acc >= m) {
                 m = q[i].acc;
                 x = i;
             }
@@ -167,19 +183,21 @@ void search(Node node, bool elim=0) {           //search alg
 
         d++;
         
-        printf("\nhere1\tm: %f\t max: %f\n", m, max);
+        // printf("\nhere\tm: %f\t max: %f\n", m, max);
+        // printf("\nsize: %lu\n", q.size());
 
         if(m >= max) {
             // printf("\nhere1\n");
             printf("\nFeature set {");
             if(!q[x].r.empty()) {
+                // printf("\nhere1\tsize: %lu\n", q[x].r.size());
                 for(int i = 0; i < q[x].r.size(); i++) {
-                    if(q[x].r[i] != -1) {
+                    // if(q[x].r[i] != -1) {
                         printf("%d", q[x].r[i]);
                         if(i != (q[x].r.size()-1)) {
                             printf(",");
                         }
-                    }
+                    // }
                 }
             }
             
@@ -312,35 +330,38 @@ int main(int argc, char* argv[]) {
     else if(features <= -1) {
         features = data[0].f.size();
     }
+    else {//testing
+        features = data[0].f.size();
+    }
 
-    int ft = -1;
-    int fCount = 0;
-    printf("Choose the subset of features(1 - %lu):\n\n", data[0].f.size());
-    printf("Enter features(-1 to use all features): ");
-    cin >> ft;
-    printf("\n");
-    if(ft <= -1 && features == data[0].f.size()) {
+    // int ft = -1;
+    // int fCount = 0;
+    // printf("Choose the subset of features(1 - %lu):\n\n", data[0].f.size());
+    // printf("Enter features(-1 to use all features): ");
+    // cin >> ft;
+    // printf("\n");
+    // if(ft <= -1 && features == data[0].f.size()) {
         for(int a = 0; a < data[0].f.size(); a++) {
             fSub.push_back(a);
         }
-    }
-    else if(ft <= -1 && features != data[0].f.size()){
-        printf("ERROR: Surpassed given feature limit\n\n");
-        return 0;
-    }
-    else {
-        while(fCount < features) {
-            if(ft > data[0].f.size() || ft < -1) {
-                printf("ERROR: invalid feature\n");
-            }
-            else {
-                fSub.push_back(ft-1);
-            }
-            cin >> ft;
-            fCount++;
-        }
-        printf("\n\n");
-    }
+    // }
+    // else if(ft <= -1 && features != data[0].f.size()){
+    //     printf("ERROR: Surpassed given feature limit\n\n");
+    //     return 0;
+    // }
+    // else {
+    //     while(fCount < features) {
+    //         if(ft > data[0].f.size() || ft < -1) {
+    //             printf("ERROR: invalid feature\n");
+    //         }
+    //         else {
+    //             fSub.push_back(ft-1);
+    //         }
+    //         cin >> ft;
+    //         fCount++;
+    //     }
+    //     printf("\n\n");
+    // }
     /*--------------------------P2 End--------------------------*/
 
     while(!c) {
