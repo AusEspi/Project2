@@ -166,6 +166,8 @@ void search(Node node, bool elim=0) {           //search alg
         }
 
         d++;
+        
+        printf("\nhere1\tm: %f\t max: %f\n", m, max);
 
         if(m >= max) {
             // printf("\nhere1\n");
@@ -211,7 +213,7 @@ void search(Node node, bool elim=0) {           //search alg
                     }
                 }
             }
-            printf("}, with an accuracy of %f\n\n", max);
+            printf("}, with an accuracy of %f%%\n\n", max);
 
             if(max > MAX) {
                 maxSet.clear();
@@ -232,6 +234,7 @@ int main(int argc, char* argv[]) {
     Node init;
     init.acc = 0;
 
+    /*--------------------------P2 Start--------------------------*/
     ifstream file;
     file.open(argv[1]);
 
@@ -285,20 +288,23 @@ int main(int argc, char* argv[]) {
     
     data.push_back(i);
 
+    // int bruh = 0;
     // for(int a = 0; a < data.size(); a++) {
-    //     ft += data[a].f.size();
+    //     bruh += data[a].f.size();
     // }
-    // printf("Class Total: %d\nTot Features: %d\n", n, ft);
+    // printf("\nTot Features: %d\n", bruh);
     // printf("Class Total: %lu\n", data.size());
-    // printf("F Ex: %f\n", data[0].f[9]);
+    // printf("F Ex: %f\n", data[data.size()-1].f[5]);
 
     file.close();
+    /*--------------------------P2 End--------------------------*/
 
     printf("\nWelcome to Austin Espinosa's Feature Selection Algorithm.\n\n");
     printf("Enter # of features(-1 to use all features): ");
     cin >> features;
     printf("\n\n");
 
+    /*--------------------------P2 Start--------------------------*/
     if(!(features <= -1) && features > data[0].f.size()) {
         printf("ERROR: # of features greater than feature set(%d > %lu)\n\n", features, data[0].f.size());
         return 0;
@@ -335,6 +341,7 @@ int main(int argc, char* argv[]) {
         }
         printf("\n\n");
     }
+    /*--------------------------P2 End--------------------------*/
 
     while(!c) {
         printf("Select algorithm:\n");
