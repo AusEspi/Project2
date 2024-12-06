@@ -247,26 +247,42 @@ int main(int argc, char* argv[]) {
     float num;
     Inst i;
 
-    while(file >> num) {
-
-        if(num == 1 || num == 2) {
-            if(!first) {
-                data.push_back(i);
-            }
-            else {
-                first = 0;
-            }
+    if(!strcmp(argv[1], "titanic-clean.txt")) {
+        while(file >> num) {
             i.c = -1;
             i.f.clear();
             i.c = num;
-            // printf("\nClass: %d\n", i.c);
-        }
-        else {
-            i.f.push_back(num);
-            // printf("Feature: %f\n", i.f[0]);
+
+            for(int a = 0; a < 6; a++) {
+                file >> num;
+                i.f.push_back(num);
+            }
+
+            data.push_back(i);
         }
     }
+    else {
+        while(file >> num) {
 
+            if(num == 1 || num == 2) {
+                if(!first) {
+                    data.push_back(i);
+                }
+                else {
+                    first = 0;
+                }
+                i.c = -1;
+                i.f.clear();
+                i.c = num;
+                // printf("\nClass: %d\n", i.c);
+            }
+            else {
+                i.f.push_back(num);
+                // printf("Feature: %f\n", i.f[0]);
+            }
+        }
+    }
+    
     data.push_back(i);
 
     // for(int a = 0; a < data.size(); a++) {
