@@ -307,7 +307,7 @@ int main(int argc, char* argv[]) {
         return 0;
     }
     else {
-        while(fCount < features-1) {
+        while(fCount < features) {
             if(ft > data[0].f.size() || ft < -1) {
                 printf("ERROR: invalid feature\n");
             }
