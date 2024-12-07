@@ -140,7 +140,7 @@ void expand(Node n, bool e) {                    //expands node
 
             node.f.push_back(n.r[i]);
 
-            node.acc = eval(node.f);               //might be wrong (elim)
+            node.acc = eval(node.r);               //might be wrong (elim)
 
             q.push_back(node);
         }
